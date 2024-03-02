@@ -1,0 +1,384 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+::placeholder {
+    color : #ccc;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 1px !important;
+    /* font-family: 'Montserrat', sans-serif; */
+}
+h1,h2,h3,h4,h5,h6 {
+    font-size: 700;
+}
+
+thead > tr ,
+tbody tr:nth-child(2n+2) {
+    background-color: #e8e8e8;
+}
+
+th:first-child {
+    width: 15%;
+}
+th:nth-child(2) {
+    width: 35%;
+}
+th:nth-child(3) {
+    width: 35%;
+}
+button {
+    cursor: pointer;
+    font-size: 1rem;
+}
+.form__control {
+    width: 100%;
+    height: 40px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    padding: 0 20px ;
+    letter-spacing: 1px;
+}
+.form__submit {
+    width: 120px;
+    height: 40px;
+    border:2px solid #ce1e1e;
+    border-radius: 4px;
+    background-color: #ce1e1e;
+    color : rgb(236, 236, 236);
+    transition: 0.5s;
+    letter-spacing: 1px;
+}
+
+body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+/* Toast */
+#toast {
+    position: fixed;
+    z-index: 9999;
+    right: 32px;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    background-color: aliceblue;
+    padding: 20px 2px;
+    margin-top:24px;
+    border-radius: 4px;
+    min-width: 400px;
+    max-width: 450px;
+    border-left: 4px solid;
+    box-shadow: 1px 5px 8px rgba(0, 0, 0, 0.08);
+    transition: all linear 1s;
+}
+
+.toast .toast__icon {
+    font-size: 24px;
+}
+.toast__icon , .toast__close {
+    padding: 0 10px;
+}
+.toast__body {
+    padding: 0 10px;
+    flex: 1;
+}
+.toast__title {
+    color:#333;
+    padding-bottom:10px
+}
+.toast__message {
+    color :#888;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.toast__close {
+    font-size: 20px;
+    color : rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.toast--success { 
+    border-color: #5db85c;
+}
+.toast--success .toast__icon {
+    color: #5db85c;
+}
+.toast--info{
+    border-color: #2f86eb;
+}
+.toast--info .toast__icon{
+    color: #2f86eb;
+}
+.toast--error{
+    border-color: #eb3c65;
+}
+.toast--error .toast__icon{
+    color: #eb3c65;
+}
+.toast--warning{
+    border-color:  #ffc021;
+}
+.toast--warning .toast__icon{
+    color:  #ffc021;    
+}
+/*  */
+.overflow {
+    display: none;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.2;
+    z-index: 2;
+    position: absolute;
+    background: linear-gradient(180deg,#000, #fff);
+}
+/* HEADER */
+
+header {
+/* display: inline-block; */
+    height: 80px; 
+    border-bottom: 3px solid rgb(109, 107, 107,.2);
+}
+
+header .container {
+    width: 80%;
+    margin: 0 auto;
+    /* line-height: 80px; */
+    display: flex;
+}
+.logo {
+    line-height: 80px;
+    flex: 1;
+}
+.logo > p {
+    font-size: 40px;
+    font-weight: 700;
+}
+header .container .user_info {
+    display: flex;
+    width: 160px;
+    align-items: center;
+    justify-content: space-evenly;
+}
+header .avatar {
+    width: 45px;
+    height: 45px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+header .avatar > img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-position: center;
+}
+
+/* MAIN */
+main {
+    position: relative;
+}
+/* Main search */
+main .container {
+    width: 90%;
+    margin: 40px auto;
+}
+
+main .search_books {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+main .search_books input {
+    width: 300px;
+}
+main .search_books button:hover {
+    background: transparent ;
+    color : rgb(15, 14, 14);
+    border:2px solid #ce1e1e;
+}
+/* Main table */
+table,th,td {
+
+    border: 2px solid #ccc;
+    text-align: unset;
+    padding: 10px;
+}
+
+td::first-letter {
+    text-transform: uppercase;
+}
+
+main table {
+    margin: 25px 0;
+    min-height: 300px;
+    width: 100%;
+    border: 2px solid #ccc !important;
+    border-collapse: collapse;
+}
+main table button {
+    border: none;
+    background: transparent;
+    color: red;
+    border-bottom:1px solid currentColor;
+    padding:2px;
+    transition: 0.5s;
+}
+
+.edit-book {
+    color: blue;
+    border-bottom:1px solid ;
+}
+
+main table button:hover {
+    font-weight: bold;
+}
+
+/* Book form add */
+#edit {
+    display: none;
+}
+
+section.form-modal {
+    display: none;
+    width: 350px;
+    position: fixed;
+    z-index: 100;
+    background: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border: 2px solid #ccc;
+}
+section .modal {
+    width: 90%;
+    margin: 20px auto;
+}
+
+section .modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+section .modal__header > h2 {
+    letter-spacing: normal;
+}
+section .modal .close {
+    color: #ccc;
+    font-size: 28px;
+    font-weight: bold;
+}
+section .modal .close:hover,
+section .modal .close:focus{
+    color: #ce1e1e;
+    cursor: pointer;
+    text-decoration: none;
+}
+/* Book form -> modal body */
+section .modal__body {
+    margin: 20px 0;
+}
+
+section .form__group {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+
+.form__group label {
+    font-weight: 600;
+    padding: 6px 0;
+    font-size: 1.1em;
+}
+
+button#create {
+    float: right;
+    margin-bottom: 20px;
+}
+
+button#create:hover {
+    background: transparent;
+    color: blue;
+}
+
+.form__message {
+    color: #f33a58;
+    padding: 4px 0;
+}
+
+/* Delete boxModal */
+section#delete-book-modal {
+    display: none;
+    /* position: relative; */
+    text-align: center;
+}
+section#delete-book-modal .modal {
+    width: 80%;
+    margin: 20px auto;
+}
+section#delete-book-modal .modal .modal__header {
+    display: block;
+}
+
+section#delete-book-modal .modal__header .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+section#delete-book-modal p {
+    margin: 40px 0 ;
+}
+
+section#delete-book-modal .btn {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn #delete:hover {
+    color:#ce1e1e;
+    background: white;
+}
+
+.btn #cancel {
+    background: rgb(3, 152, 244);
+    color:#ffffff;
+    border : 1px solid rgb(81, 78, 86); ;
+}
+
+.btn #cancel:hover {
+    background: white;
+    color:rgb(3, 152, 244);
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+  }
+  
+  .pagination a.active {
+    background-color: dodgerblue;
+    color: white;
+  }
+  
+  .pagination a:hover:not(.active) {background-color: #ddd;}
