@@ -7,6 +7,10 @@
     color : #ccc;
 }
 
+a {
+    cursor: pointer;
+}
+
 html {
     height: 100%;
     width: 100%;
@@ -14,6 +18,16 @@ html {
     letter-spacing: 1px !important;
     /* font-family: 'Montserrat', sans-serif; */
 }
+body {
+    position: relative;
+}
+body::before {
+    position: absolute;
+    content: '';
+    inset: 0;
+    /* background: url('https://media.istockphoto.com/id/1171813546/photo/flint-hills-traffic.jpg?s=170667a&w=0&k=20&c=4DqduKv9Xk24oOBDKwOuiInlow3KPiC4uK5phVcJqjE=') no-repeat center center / cover; */
+}
+
 h1,h2,h3,h4,h5,h6 {
     font-size: 700;
 }

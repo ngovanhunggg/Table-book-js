@@ -2,12 +2,28 @@ const books = [
   { id: 0, name: "Dragon Ball", author: "Toriyama Akira" },
   { id: 1, name: "Naruto", author: "Kishimoto Masashi" },
   { id: 2, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 3, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 4, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 5, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 6, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 7, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 8, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 9, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 10, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 11, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
+  { id: 12, name: "Hunter x Hunter", author: "Togashi Yoshihiro" },
 ];
 
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 const body = $("body");
 const root = $("#root");
+
+let closeNameBtn = "";
+let lengthBookOnPage = 5;
+let currentPage = 1;
+let lengthPage = calcLengthPage();
+
 render(appComponent(), root);
 
 // tag
@@ -18,6 +34,7 @@ const nameErrBook = $("#name_error");
 const authorErrBook = $("#author_error");
 const titleDeleleBook = $("#title-book");
 const titleModalBook = $("#modal-title");
+const paginationNumber = $("#paginate-book");
 
 // button
 const btnAdd = $("#add-book");
@@ -33,8 +50,7 @@ const modalDeleteBook = $("#delete-book-modal");
 
 // different
 
-let closeNameBtn = "";
-let lengthBookOnPage = 5;
+renderPagination(lengthPage, currentPage);
 
 // Event
 const handleOpenModalAdd = () => {
@@ -56,8 +72,16 @@ const handleCreateBook = (e) => {
   e.preventDefault();
   if (checkValidate) {
     const textSearch = searchBook.value.trim();
-
     addBook(nameValue, authorValue);
+    const page = calcLengthPage();
+    console.log(page);
+
+    const renderBooks = books.filter((b, i) => {
+      return (
+        i + 1 > lengthBookOnPage * currentPage - lengthBookOnPage &&
+        i + 1 <= lengthBookOnPage * currentPage
+      );
+    });
     toast({
       title: "Success",
       message: `Book ${nameBook.value} is added successfully`,
@@ -67,8 +91,9 @@ const handleCreateBook = (e) => {
     if (textSearch) {
       searchBooks(textSearch);
     } else {
-      renderTableBook(books);
+      renderTableBook(renderBooks);
     }
+    checkPaginate(page, currentPage);
     clearInputFormCreate();
   }
 };
@@ -102,11 +127,21 @@ function handleRemoveBook() {
   const book = books.find((book) => book.id == this.dataset.id);
   const isDel = deleteBook(this.dataset.id);
   if (isDel) {
+    const page = calcLengthPage();
+    console.log(page);
+    const renderBooks = books.filter((b, i) => {
+      return (
+        i + 1 > lengthBookOnPage * currentPage - lengthBookOnPage &&
+        i + 1 <= lengthBookOnPage * currentPage
+      );
+    });
     if (textSearch) {
       searchBooks(textSearch);
     } else {
-      renderTableBook(books);
+      renderTableBook(renderBooks);
     }
+    checkPaginate(page, currentPage);
+
     toast({
       title: "Success",
       message: `Book ${book.name} is added successfully`,
@@ -156,12 +191,27 @@ function handleEditBook(e) {
     } else {
       renderTableBook(books);
     }
+
     toast({
       title: "Success",
       message: `Book ${this.dataset.name} is edited successfully`,
       type: "success",
       delay: 1000,
     });
+  }
+}
+
+function handleOnChangePage(currentPageP) {
+  const cr = Number(currentPageP);
+  if (cr !== currentPage) {
+    const renderBooks = books.filter((b, i) => {
+      return (
+        i + 1 > lengthBookOnPage * cr - lengthBookOnPage &&
+        i + 1 <= lengthBookOnPage * cr
+      );
+    });
+    renderTableBook(renderBooks);
+    checkPaginate(lengthPage, cr);
   }
 }
 
@@ -173,10 +223,18 @@ removeBook.addEventListener("click", handleRemoveBook);
 window.addEventListener("click", handleCancelModal);
 searchBook.addEventListener("input", function () {
   const textSearch = this.value.trim();
+
+  const renderBooks = books.filter((b, i) => {
+    return (
+      i + 1 > lengthBookOnPage * currentPage - lengthBookOnPage &&
+      i + 1 <= lengthBookOnPage * currentPage
+    );
+  });
+
   if (textSearch) {
     searchBooks(textSearch);
   } else {
-    renderTableBook(books);
+    renderTableBook(renderBooks);
   }
 });
 // Components has not parameters
@@ -253,12 +311,10 @@ function paginationComponent() {
   return `
   <div class="pagination">
     <a href="#">&laquo;</a>
-    <a class="active href="#">1</a>
-    <a href="#">2</a>
-    <a href="#">3</a>
-    <a href="#">4</a>
-    <a href="#">5</a>
-    <a href="#">6</a>
+    <div id="paginate-book" class="pagination__number">
+      <a class="active" href="#">1</a>
+      <a  href="#">2</a>
+    </div>
     <a href="#">&raquo;</a>
   </div>
 
@@ -312,7 +368,15 @@ function tableBookComponent(books) {
                 </tr>
             </thead>
             <tbody>
-              ${books.map((book, i) => bookComponent(book, i)).join("")}
+              ${
+                books.length
+                  ? books
+                      .map((book, i) =>
+                        i < lengthBookOnPage ? bookComponent(book, i) : ""
+                      )
+                      .join("")
+                  : `<tr><td colspan='4' style='text-align:center;'><span>Don't have any books</span> <button style='color:red' onclick='handleOpenModalAdd()'> Add book</button></td><tr>`
+              }
             </tbody>
         </table>
       `;
@@ -344,6 +408,21 @@ function renderTableBook(
     : html;
   render(tbodyHTML, tbody);
 }
+
+function renderPagination(lengthPage = 3, currentPage = 1) {
+  const paginateHTML = Array(lengthPage)
+    .fill(0)
+    .map((p, i) =>
+      i + 1 === currentPage
+        ? `<a class="active" >${i + 1}</a>`
+        : `<a onclick="handleOnChangePage(${i + 1})">
+          ${i + 1}
+        </a>`
+    )
+    .join("");
+  render(paginateHTML, paginationNumber);
+}
+
 function displayTag(tag, show = true) {
   const overflow = $(".overflow");
 
@@ -371,7 +450,7 @@ function closeBox(close) {
 
 function addBook(name = "", author = "") {
   books.push({
-    id: books[books.length - 1] ? books[books.length - 1].id : 0,
+    id: books[books.length - 1] ? books[books.length - 1].id + 1 : 0,
     name,
     author,
   });
@@ -379,9 +458,13 @@ function addBook(name = "", author = "") {
 
 function deleteBook(id) {
   try {
+    console.log(books);
+
     books.forEach((book, i) => {
       book.id == id && books.splice(i, 1);
     });
+    console.log(books);
+
     // if (searchInput.value.trim() !== "") {
     //   searchBooks();
     // } else renderBooksTable(books);
@@ -429,6 +512,21 @@ function validateFormCreate(name, author) {
   }
 
   return !!(name.trim() && author.trim());
+}
+
+function calcLengthPage() {
+  const page = Math.ceil(books.length / lengthBookOnPage);
+  return page ? page : 1;
+}
+
+function checkPaginate(page, currentPageP) {
+  if (page && currentPageP) {
+    if (page !== lengthPage || currentPageP !== currentPage) {
+      lengthPage = page;
+      currentPage = currentPageP;
+      renderPagination(page, currentPageP);
+    }
+  }
 }
 
 // Toast function
